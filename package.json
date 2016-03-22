@@ -1,6 +1,6 @@
 {
   "name": "coap",
-  "version": "0.13.1",
+  "version": "0.14.0",
   "description": "A CoAP library for node modelled after 'http'",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "pre-commit": "0.0.9",
     "chai": "~3.4.1",
     "mocha": "~2.3.4",
-    "timekeeper": "0.0.5",
+    "timekeeper": "~0.0.5",
     "sinon": "~1.7.3"
   },
   "dependencies": {
