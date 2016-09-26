@@ -283,7 +283,7 @@ It is HTTP-compatible, as it can be passed `404`.
 
 Sets a single option value.
 All the options are in binary format, except for
-`'Content-Format'`, `'Accept'` and `'ETag'`.
+`'Content-Format'`, `'Accept'`, `'Max-Age'` and `'ETag'`.
 See <a href='#registerOption'><code>registerOption</code></a>
  to know how to register more.
 
@@ -538,11 +538,6 @@ __node-coap__ is an **OPEN Open Source Project**. This means that:
 
 See the [CONTRIBUTING.md](https://github.com/mcollina/node-coap/blob/master/CONTRIBUTING.md) file for more details.
 
-## Limitations
-
-The maximum packet size is 1280, as the
-[blockwise](http://datatracker.ietf.org/doc/draft-ietf-core-block/) is
-not supported yet.
 
 ## Contributors
 
