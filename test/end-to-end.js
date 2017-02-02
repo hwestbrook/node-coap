@@ -134,6 +134,21 @@ describe('end-to-end', function() {
     })
   })
 
+  it('should normalize strings using NFC', function(done) {
+    var req = coap.request({
+        port: port
+        // U+210E (plank constant) becomes to U+0068 (h) in “compatible” normalizations (should not happen)
+        // U+0065 (e) U+0301 (combining acute accent) becomes U+00e9 (é) in “composed” normalizations (should happen)
+      , pathname: '/\u210e/\u0065\u0301'
+    }).end()
+
+    server.on('request', function(req, res) {
+      expect(req.url).to.equal('/\u210e/\u00e9')
+      done()
+      res.end()
+    })
+  })
+
   describe('formats', function() {
     var formats = [ 'text/plain', 'application/link-format',
       'application/xml', 'application/octet-stream',
@@ -146,7 +161,7 @@ describe('end-to-end', function() {
           req.setOption(option, format)
           req.end()
 
-          server.on('request', function(req) {
+          server.once('request', function(req) {
             expect(req.options[0].name).to.eql(option)
             expect(req.options[0].value).to.eql(format)
             done()
@@ -163,7 +178,7 @@ describe('end-to-end', function() {
 
           coap.request(req).end()
 
-          server.on('request', function(req) {
+          server.once('request', function(req) {
             expect(req.options[0].name).to.eql(option)
             expect(req.options[0].value).to.eql(format)
             done()
@@ -180,7 +195,7 @@ describe('end-to-end', function() {
 
           coap.request(req).end()
 
-          server.on('request', function(req) {
+          server.once('request', function(req) {
             expect(req.headers[option]).to.eql(format)
             done()
           })
@@ -191,7 +206,7 @@ describe('end-to-end', function() {
           req.setOption(option, format)
           req.end()
 
-          server.on('request', function(req) {
+          server.once('request', function(req) {
             expect(req.headers[option]).to.eql(format)
             done()
           })
@@ -204,7 +219,7 @@ describe('end-to-end', function() {
         var req = coap.request('coap://localhost:'+port)
         req.end()
 
-        server.on('request', function(req, res) {
+        server.once('request', function(req, res) {
           res.setOption('Content-Format', format)
           res.end()
         })
@@ -223,7 +238,7 @@ describe('end-to-end', function() {
     req.setOption('Content-Format', 'application/json; charset=utf8')
     req.end()
 
-    server.on('request', function(req) {
+    server.once('request', function(req) {
       expect(req.options[0].name).to.equal('Content-Format')
       expect(req.options[0].value).to.equal('application/json')
       done()
@@ -236,7 +251,7 @@ describe('end-to-end', function() {
     req.setOption('Max-Age', 26763)
     req.end()
 
-    server.on('request', function(req) {
+    server.once('request', function(req) {
       expect(req.options[0].name).to.equal('Max-Age')
       expect(req.options[0].value).to.equal(26763)
       done()
@@ -251,7 +266,7 @@ describe('end-to-end', function() {
       done()
     })
 
-    server.on('request', function(req, res) {
+    server.once('request', function(req, res) {
       res.writeHead(200, {'Content-Format': 'application/json'})
       res.write(JSON.stringify({}))
       res.end()
